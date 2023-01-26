@@ -65,8 +65,10 @@ Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in 
 - 17630
 - 21090
 
-First booted up postgres and pg-admin using `docker-compose up`
+First I booted up postgres and pg-admin using `docker-compose up`
 
+
+I modified ingest_data.py in this folder to handle both tables.
 
 Then, ran `export URL=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-01.csv.gz`
 
@@ -95,6 +97,15 @@ python ingest_data.py \
   --table_name=zones \
   --url=${URL}
 ```
+
+I ran the following query:
+```
+SELECT COUNT(1)
+FROM green_taxi_trips
+WHERE CAST(lpep_pickup_datetime AS date) = '2019-01-15'
+AND CAST(lpep_dropoff_datetime AS date) = '2019-01-15';
+```
+to get 20530.
 
 ## Question 4. Largest trip for each day
 
