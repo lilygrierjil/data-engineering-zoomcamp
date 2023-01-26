@@ -48,7 +48,7 @@ def main(params):
             t_start = time()
             
             df = next(df_iter)
-
+            print(df.head())
             df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
             df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
 

@@ -117,6 +117,19 @@ Use the pick up time for your calculations.
 - 2019-01-15
 - 2019-01-10
 
+
+I used the following query:
+'''
+SELECT 
+	lpep_pickup_datetime
+FROM green_taxi_trips
+ORDER BY trip_distance DESC
+LIMIT 1;
+'''
+to come up with 2019-01-15.
+
+
+
 ## Question 5. The number of passengers
 
 In 2019-01-01 how many trips had 2 and 3 passengers?
@@ -126,6 +139,24 @@ In 2019-01-01 how many trips had 2 and 3 passengers?
 - 2: 1282 ; 3: 254
 - 2: 1282 ; 3: 274
 
+
+Query for 2 passengers:
+```
+SELECT COUNT(1)
+FROM green_taxi_trips
+WHERE CAST(lpep_pickup_datetime AS date) = '2019-01-01'
+AND passenger_count = 2;
+```
+
+Query for 3 passengers:
+```
+SELECT COUNT(1)
+FROM green_taxi_trips
+WHERE CAST(lpep_pickup_datetime AS date) = '2019-01-01'
+AND passenger_count = 3;
+```
+
+This returned 1282 trips with 2 passengers and 254 trips with 3 passengers.
 
 ## Question 6. Largest tip
 
@@ -139,6 +170,20 @@ Note: it's not a typo, it's `tip` , not `trip`
 - South Ozone Park
 - Long Island City/Queens Plaza
 
+I used the following query:
+```
+SELECT "Zone"
+FROM green_taxi_trips t
+JOIN zones z
+ON t."DOLocationID" = z."LocationID"
+WHERE t."PULocationID" = 
+(SELECT "LocationID"
+FROM zones
+WHERE "Zone" = 'Astoria')
+ORDER BY tip_amount DESC
+LIMIT 1;
+```
+and got Long Island City/Queens Plaza.
 
 ## Submitting the solutions
 
