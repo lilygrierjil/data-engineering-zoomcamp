@@ -1,4 +1,4 @@
-## Week 1 Homework
+## Week 1 Homework: Lily's Solutions
 
 In this homework we'll prepare the environment 
 and practice with Docker and SQL
@@ -187,14 +187,4 @@ LIMIT 1;
 ```
 and got Long Island City/Queens Plaza.
 
-## Submitting the solutions
 
-* Form for submitting: [form](https://forms.gle/EjphSkR1b3nsdojv7)
-* You can submit your homework multiple times. In this case, only the last submission will be used. 
-
-Deadline: 26 January (Thursday), 22:00 CET
-
-
-## Solution
-
-We will publish the solution here
