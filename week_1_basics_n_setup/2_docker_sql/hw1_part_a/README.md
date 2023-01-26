@@ -35,6 +35,8 @@ How many python packages/modules are installed?
 Ran `docker run -it python 3:9 bash`
 followed by `pip list`
 
+Found 3 packages.
+
 # Prepare Postgres
 
 Run Postgres and load data as shown in the videos
@@ -49,6 +51,7 @@ You will also need the dataset with zones:
 Download this data and put it into Postgres (with jupyter notebooks or with a pipeline)
 
 
+
 ## Question 3. Count records 
 
 How many taxi trips were totally made on January 15?
@@ -61,6 +64,37 @@ Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in 
 - 20530
 - 17630
 - 21090
+
+First booted up postgres and pg-admin using `docker-compose up`
+
+
+Then, ran `export URL=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-01.csv.gz`
+
+Then, ran the following to upload green tripdata locally.
+```
+python ingest_data.py \
+  --user=root \
+  --password=root \
+  --host=localhost \
+  --port=5432 \
+  --db=ny_taxi \
+  --table_name=green_taxi_trips \
+  --url=${URL}
+```
+
+Then, changed the URL value by running `export URL=https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv`
+
+And then ran
+```
+python ingest_data.py \
+  --user=root \
+  --password=root \
+  --host=localhost \
+  --port=5432 \
+  --db=ny_taxi \
+  --table_name=zones \
+  --url=${URL}
+```
 
 ## Question 4. Largest trip for each day
 
