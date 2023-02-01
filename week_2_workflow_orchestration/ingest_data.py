@@ -46,6 +46,9 @@ def ingest_data(user, password, host, port, db, table_name, df):
     df.head(n=0).to_sql(name=table_name, con=engine, if_exists='replace')
     df.to_sql(name=table_name, con=engine, if_exists='append')
 
+@flow(name="Subflow", log_prints=True)
+def log_subflow(table_name: str):
+    print(f'Logging subflow for: {table_name}')
 
 @flow(name="Ingest Flow")
 def main_flow(table_name: str):
@@ -56,7 +59,7 @@ def main_flow(table_name: str):
     db = 'ny_taxi'
     table_name = table_name
     url = "https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"    
-
+    log_subflow(table_name)
     raw_data = extract_data(url)
     data = transform_data(raw_data)
     ingest_data(user, password, host, port, db, table_name, data)
