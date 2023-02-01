@@ -44,6 +44,7 @@ def etl_gcs_to_bq():
 
     path = extract_from_gcs(color, year, month)
     df = transform(path)
+    write_bq(df)
 
 if __name__=='__main__':
     etl_gcs_to_bq()
