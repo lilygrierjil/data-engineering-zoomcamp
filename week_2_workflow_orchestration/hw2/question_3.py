@@ -26,11 +26,8 @@ def write_bq(df: pd.DataFrame) -> None:
    
 
 @flow(log_prints=True)
-def etl_gcs_to_bq():
+def etl_gcs_to_bq(year: int, month: int, color: str) -> None:
     """Main ETL flow to load data into Big Query"""
-    color = "yellow"
-    year = 2021
-    month = 1
     path = extract_from_gcs(color, year, month)
     df = pd.read_parquet(path)
     write_bq(df)
@@ -44,11 +41,12 @@ def etl_parent_flow(
 ):
     total_rows_processed = 0
     for month in months:
-        rows_processed = etl_web_to_gcs(year, month, color)
+        rows_processed = etl_gcs_to_bq(year, month, color)
         total_rows_processed += rows_processed
     print(f'total rows processed: {total_rows_processed}')
 
 if __name__=='__main__':
-    etl_gcs_to_bq()
+    etl_parent_flow()
 
 # ran: prefect deployment build question_3.py:etl_parent_flow -n "Parameterized GCS to BQ"
+# then ran: prefect deployment apply etl_parent_flow-deployment.yaml
