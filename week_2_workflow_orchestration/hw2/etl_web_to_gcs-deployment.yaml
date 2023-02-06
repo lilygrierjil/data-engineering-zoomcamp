@@ -1,17 +1,14 @@
 ###
 ### A complete description of a Prefect Deployment for flow 'etl-web-to-gcs'
 ###
-name: Web to GCS
+name: 'Parameterized web to GCS'
 description: The main ETL function
-version: 4cb0061d94cc3ba60516cdc0e6f53bdc
+version: ec8906c5ce8112ed650b3acf94845fd4
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
-parameters: {}
-schedule:
-  cron: 0 5 1 * *
-  timezone: null
-  day_or: true
+parameters: {"color": "green", "month": 4, "year": 2019}
+schedule: null
 infra_overrides: {}
 infrastructure:
   type: process
@@ -31,10 +28,25 @@ flow_name: etl-web-to-gcs
 manifest_path: null
 storage: null
 path: /home/lilygrier/lily/data-engineering-zoomcamp/week_2_workflow_orchestration/hw2
-entrypoint: question_1.py:etl_web_to_gcs
+entrypoint: question_4_a.py:etl_web_to_gcs
 parameter_openapi_schema:
   title: Parameters
   type: object
-  properties: {}
-  required: null
+  properties:
+    color:
+      title: color
+      position: 0
+      type: string
+    year:
+      title: year
+      position: 1
+      type: integer
+    month:
+      title: month
+      position: 2
+      type: integer
+  required:
+  - color
+  - year
+  - month
   definitions: null
