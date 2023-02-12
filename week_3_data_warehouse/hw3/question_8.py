@@ -8,10 +8,11 @@ import os
 
 @task(retries=3)
 def fetch(dataset_url: str) -> pd.DataFrame:
-    """Read taxi data from web into pandas DataFrame"""
+    """Read FHV data from web into pandas DataFrame"""
     # if randint(0, 1) > 0:
     #     raise Exception
-    df = pd.read_csv(dataset_url)
+    df = pd.read_csv(dataset_url, dtype={'DOlocationID': 'Int64',
+    'PUlocationID': 'Int64'})
     return df
 
 
