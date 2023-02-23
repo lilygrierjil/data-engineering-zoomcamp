@@ -32,5 +32,7 @@ Question 4
 SELECT COUNT(*) FROM `dbt_lgrier_production.fact_fhv_trips`
 WHERE EXTRACT(YEAR FROM pickup_datetime) = 2019;
 ```
+Question 5
 
+Link to Data Studio report: https://lookerstudio.google.com/s/hs5Wq5AO2a0
 
