@@ -37,3 +37,39 @@ python more_spark_sql.py \
     --input_green=data/pq/green/2020/* \
     --input_yellow=data/pq/yellow/2020/* \
     --output=data/report-2020
+
+URL="spark://de-zoomcamp.us-central1-c.c.enhanced-burner-375316.internal:7077"
+spark-submit \
+    --master "${URL}" \
+    more_spark_sql.py \
+    --input_green=data/pq/green/2021/* \
+    --input_yellow=data/pq/yellow/2021/* \
+    --output=data/report-2021
+
+
+    --input_green=gs://de-zoomcamp-nytaxi/pq/green/2021/* \
+    --input_yellow=gs://de-zoomcamp-nytaxi/pq/yellow/2021/* \
+    --output=gs://de-zoomcamp-nytaxi/report-2021
+
+gcloud dataproc jobs submit pyspark \
+    gs://de-zoomcamp-nytaxi/code/more_spark_sql.py \
+    --cluster=de-zoomcamp-cluster \
+    --region=us-central1 \
+    -- \
+    --input_green=gs://de-zoomcamp-nytaxi/pq/green/2020/* \
+    --input_yellow=gs://de-zoomcamp-nytaxi/pq/yellow/2020/* \
+    --output=gs://de-zoomcamp-nytaxi/report-2020
+    
+trips_data_all.reports-2020
+
+gsutil cp spark_sql_bigquery.py gs://de-zoomcamp-nytaxi/code/spark_sql_bigquery.py
+
+gcloud dataproc jobs submit pyspark \
+    gs://de-zoomcamp-nytaxi/code/spark_sql_bigquery.py \
+    --cluster=de-zoomcamp-cluster \
+    --region=us-central1 \
+    --jars=gs://spark-lib/bigquery/spark-bigquery-with-dependencies_2.12-0.23.2.jar \
+    -- \
+    --input_green=gs://de-zoomcamp-nytaxi/pq/green/2020/* \
+    --input_yellow=gs://de-zoomcamp-nytaxi/pq/yellow/2020/* \
+    --output=trips_data_all.reports-2020
