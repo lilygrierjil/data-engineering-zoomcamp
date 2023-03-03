@@ -26,3 +26,14 @@ schema = types.StructType([
     types.StructField('wav_request_flag', types.StringType(), True), 
     types.StructField('wav_match_flag', types.StringType(), True)
 ])
+
+types.StructType([types.StructField('hour', types.TimestampType(), True), 
+            types.StructField('zone', types.LongType(), True), 
+            types.StructField('revenue', types.DoubleType(), True), 
+            types.StructField('count', types.LongType(), True)])
+
+
+python more_spark_sql.py \
+    --input_green=data/pq/green/2020/* \
+    --input_yellow=data/pq/yellow/2020/* \
+    --output=data/report-2020
