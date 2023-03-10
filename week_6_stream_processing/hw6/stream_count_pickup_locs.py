@@ -12,6 +12,7 @@ pu_loc_count = app.Table('pickup_location_count', default=int)
 async def process(stream):
     async for event in stream.group_by(TaxiRide.PULocationID):
         pu_loc_count[event.PULocationID] += 1
+        print(event.PULocationID)
         print(pu_loc_count)
 
 if __name__ == '__main__':
