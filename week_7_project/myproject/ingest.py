@@ -1,0 +1,44 @@
+import pandas as pd
+from sodapy import Socrata
+from prefect import flow, task
+from prefect_gcp.cloud_storage import GcsBucket
+from pathlib import Path
+import os
+
+
+@task(retries=3,
+      log_prints=True)
+def fetch():
+    columns = 'crime_id, offense_date, agency_crimetype_id, city, state, coord1, coord2, masked_address, location, category'
+    client = Socrata("data.memphistn.gov", None)
+    # items = client.get_all("ybsi-jur4", select=columns)
+    items = client.get("ybsi-jur4", select=columns, limit=300)
+    df = pd.DataFrame.from_records(items)
+    return df
+
+@task()
+def write_local(df) -> Path:
+    """Write DataFrame out locally as parquet file"""
+    if not os.path.exists("data"):
+        os.mkdir("data")
+    path = Path("data/memphis_police_data.parquet")
+    df.to_parquet(path, compression="gzip")
+    return path
+
+@task(log_prints=True)
+def write_to_gcs(path: Path):
+    # upload to gcs
+    gcs_block = GcsBucket.load("zoom-gcs")
+    gcs_block.upload_from_path(from_path=path, to_path=path)
+    os.remove(path)
+    return
+
+@flow()
+def etl_web_to_gcs():
+    """The main ETL function."""
+    df = fetch()
+    path = write_local(df)
+    write_to_gcs(path)
+
+if __name__=='__main__':
+    etl_web_to_gcs()
