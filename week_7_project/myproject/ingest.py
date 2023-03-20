@@ -16,6 +16,14 @@ def fetch():
     df = pd.DataFrame.from_records(items)
     return df
 
+@task(retries=3,
+      log_prints=True)
+def transform_data(raw_data):
+    raw_data['city'] = raw_data['city'].rename({'MEMPHIS': 'Memphis', 'M': 'Memphis'})
+    raw_data['offense_date_datetime'] = pd.to_datetime(raw_data['offense_date'])
+    raw_data['offense_date_day'] = raw_data['offense_date_datetime'].dt.date
+    return raw_data
+
 @task()
 def write_local(df) -> Path:
     """Write DataFrame out locally as parquet file"""
@@ -30,14 +38,15 @@ def write_to_gcs(path: Path):
     # upload to gcs
     gcs_block = GcsBucket.load("zoom-gcs")
     gcs_block.upload_from_path(from_path=path, to_path=path)
-    os.remove(path)
+    # os.remove(path)
     return
 
 @flow()
 def etl_web_to_gcs():
     """The main ETL function."""
     df = fetch()
-    path = write_local(df)
+    cleaned_df = transform_data(df)
+    path = write_local(cleaned_df)
     write_to_gcs(path)
 
 if __name__=='__main__':
