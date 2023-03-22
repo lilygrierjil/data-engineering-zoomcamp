@@ -1,15 +1,14 @@
 locals {
-  data_lake_bucket = "covid_datalake"
+  data_lake_bucket = "memphis_police_data_lake"
 }
 
 variable "project" {
-  description = "Project-ID"
-  default = "<myprojectid>"
+  description = "de-zoomcamp-final-project"
 }
 
 variable "region" {
   description = "Region for GCP resources. Choose as per your location: https://cloud.google.com/about/locations"
-  default = "EU"
+  default = "us-central1"
   type = string
 }
 
@@ -21,5 +20,5 @@ variable "storage_class" {
 variable "BQ_DATASET" {
   description = "BigQuery Dataset that raw data (from GCS) will be written to"
   type = string
-  default = "memphis_police_data"
+  default = "memphis_police_data_all"
 }

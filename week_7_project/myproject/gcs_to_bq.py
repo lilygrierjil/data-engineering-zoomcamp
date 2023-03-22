@@ -10,16 +10,20 @@ def create_bq_dataset():
 
 @task()
 def create_external_table():
-    warehouse = BigQueryWarehouse.load("final-project-bq", project='buoyant-song-375701')
-    create_operation = '''
-    CREATE OR REPLACE EXTERNAL TABLE `final_project.external_memphis_police_data`
-    OPTIONS (
-    format = 'parquet',
-    uris = ['gs://prefect-de-zoomcamp-lily/data/memphis_police_data.parquet']
-    );
-    '''
     gcp_credentials_block = GcpCredentials.load("zoom-gcp-creds")
-    warehouse.execute(create_operation)
+
+    with BigQueryWarehouse(gcp_credentials=gcp_credentials_block, project='buoyant-song-375701') as warehouse:
+        create_operation = '''
+        CREATE OR REPLACE EXTERNAL TABLE `final_project.external_memphis_police_data`
+        OPTIONS (
+        format = 'parquet',
+        uris = ['gs://prefect-de-zoomcamp-lily/data/memphis_police_data.parquet']
+        );
+        '''
+        # result = bigquery_query(create_operation, gcp_credentials_block, project='buoyant-song-375701')
+
+        warehouse.execute(create_operation)
+        #return result
 
 @task()
 def create_partitioned_clustered_table():
@@ -30,7 +34,7 @@ def create_partitioned_clustered_table():
     CLUSTER BY category AS
     SELECT * FROM final_project.external_memphis_police_data;'''
     warehouse.execute(create_operation, credentials=GcpCredentials.load("zoom-gcp-creds"))
-
+    # gcp_credentials_block = GcpCredentials.load("zoom-gcp-creds")
 
 @flow(log_prints=True)
 def etl_gcs_to_bq():
