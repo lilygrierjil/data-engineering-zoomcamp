@@ -2,6 +2,7 @@ import pandas as pd
 from sodapy import Socrata
 from prefect import flow, task
 from prefect_gcp.cloud_storage import GcsBucket
+from prefect_gcp import GcpCredentials
 from pathlib import Path
 import os
 
@@ -34,11 +35,18 @@ def write_local(df) -> Path:
     return path
 
 @task(log_prints=True)
+def make_gcs_block():
+    bucket_block = GcsBucket(
+    gcp_credentials=GcpCredentials(service_account_file='service_account.json'),
+    bucket="memphis_police_data_lake_de-zoomcamp-final-project")
+    bucket_block.save("final-project-bucket", overwrite=True)
+
+@task(log_prints=True)
 def write_to_gcs(path: Path):
     # upload to gcs
-    gcs_block = GcsBucket.load("zoom-gcs")
+    gcs_block = GcsBucket.load('final-project-bucket')
     gcs_block.upload_from_path(from_path=path, to_path=path)
-    # os.remove(path)
+    os.remove(path)
     return
 
 @flow()
@@ -47,6 +55,7 @@ def etl_web_to_gcs():
     df = fetch()
     cleaned_df = transform_data(df)
     path = write_local(cleaned_df)
+    make_gcs_block()
     write_to_gcs(path)
 
 if __name__=='__main__':
