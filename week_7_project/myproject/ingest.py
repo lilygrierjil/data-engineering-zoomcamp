@@ -22,7 +22,9 @@ def fetch():
 def transform_data(raw_data):
     raw_data['city'] = raw_data['city'].rename({'MEMPHIS': 'Memphis', 'M': 'Memphis'})
     raw_data['offense_date_datetime'] = pd.to_datetime(raw_data['offense_date'])
-    raw_data['offense_date_day'] = raw_data['offense_date_datetime'].dt.date
+    #raw_data['offense_date_day'] = raw_data['offense_date_datetime'].dt.date
+    raw_data['coord1'] = raw_data['coord1'].astype(float)
+    raw_data['coord2'] = raw_data['coord2'].astype(float)
     return raw_data
 
 @task()
@@ -46,7 +48,7 @@ def write_to_gcs(path: Path):
     # upload to gcs
     gcs_block = GcsBucket.load('final-project-bucket')
     gcs_block.upload_from_path(from_path=path, to_path=path)
-    os.remove(path)
+    # os.remove(path)
     return
 
 @flow()
