@@ -16,6 +16,5 @@ mpd_schema = types.StructType([
     types.StructField("coord2", types.DoubleType(), True),
     types.StructField("location", types.MapType(types.DoubleType(), types.DoubleType()), False),
     types.StructField("offense_date_datetime", types.TimestampType(), True),
-    types.StructField("offense_date_day", types.DateType(), True)
 ])
 
