@@ -104,11 +104,6 @@ resource "google_dataproc_cluster" "mycluster" {
 
     master_config {
       num_instances = 1
-      # machine_type  = "e2-medium"
-      # disk_config {
-      #   boot_disk_type    = "pd-ssd"
-      #   boot_disk_size_gb = 500
-      # }
     }
     gce_cluster_config {
       # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -120,11 +115,6 @@ resource "google_dataproc_cluster" "mycluster" {
 
     worker_config {
       num_instances    = 2
-      # machine_type     = "e2-medium"
-      # disk_config {
-      #   boot_disk_size_gb = 500
-      #   boot_disk_type    = "pd-ssd"
-      # }
     }
   }
 }
