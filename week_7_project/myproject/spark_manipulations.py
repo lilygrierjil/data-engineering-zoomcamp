@@ -25,12 +25,12 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 # read from big query
-bucket = "[bucket]"
+bucket = "dataproc-temp-bucket_de-zoomcamp-final-project"
 spark.conf.set('temporaryGcsBucket', bucket)
 
 df = spark.read.format('bigquery') \
   .schema(mpd_schema) \
-  .option('table', 'mephis_police_data_all.memphis_police_data_partitioned_clustered') \
+  .option('table', 'memphis_police_data_all.memphis_police_data_partitioned_clustered') \
   .load()
 
 df = df.withColumn('offense_day', to_date('offense_date_datetime'))

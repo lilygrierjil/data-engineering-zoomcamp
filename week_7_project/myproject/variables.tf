@@ -1,5 +1,7 @@
 locals {
   data_lake_bucket = "memphis_police_data_lake"
+  staging_bucket = "dataproc-staging-bucket"
+  temp_bucket = "dataproc-temp-bucket"
 }
 
 variable "project" {
