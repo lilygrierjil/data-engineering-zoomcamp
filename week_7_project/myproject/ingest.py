@@ -12,8 +12,8 @@ import os
 def fetch():
     columns = 'crime_id, offense_date, agency_crimetype_id, city, state, coord1, coord2, masked_address, location, category'
     client = Socrata("data.memphistn.gov", None)
-    # items = client.get_all("ybsi-jur4", select=columns)
-    items = client.get("ybsi-jur4", select=columns, limit=300)
+    items = client.get_all("ybsi-jur4", select=columns) # for ALL rows
+    # items = client.get("ybsi-jur4", select=columns, limit=300) # for testing first 300 rows
     df = pd.DataFrame.from_records(items)
     return df
 
@@ -48,7 +48,7 @@ def write_to_gcs(path: Path):
     # upload to gcs
     gcs_block = GcsBucket.load('final-project-bucket')
     gcs_block.upload_from_path(from_path=path, to_path=path)
-    # os.remove(path)
+    os.remove(path)
     return
 
 @flow()
