@@ -46,6 +46,22 @@ FROM memphis
 GROUP BY 1, 2
 ''')
                        
-daily_grouped.write.format('bigquery') \
+daily_grouped.write \
+  .mode('overwrite') \
+  .format('bigquery') \
   .option('table', 'memphis_police_data_all.daily_crime_type_counts') \
+  .save()
+
+monthly_grouped = spark.sql('''
+SELECT agency_crimetype_id AS crime_type,
+date_trunc('month', offense_day) AS offense_month, 
+FIRST(category) AS crime_type_category,
+COUNT(crime_id) AS monthly_crime_type_count
+FROM memphis
+GROUP BY 1, 2
+''')
+                       
+monthly_grouped.write.format('bigquery') \
+  .mode('overwrite') \
+  .option('table', 'memphis_police_data_all.monthly_crime_type_counts') \
   .save()
