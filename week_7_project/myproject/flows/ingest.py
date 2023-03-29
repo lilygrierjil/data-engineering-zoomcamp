@@ -12,8 +12,8 @@ import os
 def fetch():
     columns = 'crime_id, offense_date, agency_crimetype_id, city, state, coord1, coord2, masked_address, location, category'
     client = Socrata("data.memphistn.gov", None)
-    # items = client.get_all("ybsi-jur4", select=columns) # for ALL rows
-    items = client.get("ybsi-jur4", select=columns, limit=300) # for testing first 300 rows
+    items = client.get_all("ybsi-jur4", select=columns) # for ALL rows
+    # items = client.get("ybsi-jur4", select=columns, limit=300) # for testing first 300 rows
     df = pd.DataFrame.from_records(items)
     return df
 
