@@ -4,13 +4,8 @@ from prefect import flow, task
 
 @task()
 def get_gcp_credentials():
-    return GcpCredentials(service_account_file='service_account.json')
+    return GcpCredentials(service_account_file='../service_account.json')
 
-# @task()
-# def create_bq_dataset(gcp_credentials_block):
-#     gcp_credentials_block = GcpCredentials.load("final-project-gcp-creds")
-#     client = gcp_credentials_block.get_bigquery_client()
-#     client.create_dataset("final_project", exists_ok=True)
 
 @task()
 def create_external_table(gcp_credentials):
@@ -33,7 +28,7 @@ def create_partitioned_clustered_table(gcp_credentials):
 
         create_operation = '''
         CREATE OR REPLACE TABLE memphis_police_data_all.memphis_police_data_partitioned_clustered
-        PARTITION BY DATE(offense_date_datetime)
+        PARTITION BY date_trunc(offense_date_datetime, MONTH)
         CLUSTER BY category AS
         SELECT * FROM memphis_police_data_all.external_memphis_police_data;'''
         warehouse.execute(create_operation)
