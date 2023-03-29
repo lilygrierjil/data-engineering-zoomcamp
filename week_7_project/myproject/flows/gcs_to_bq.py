@@ -37,7 +37,6 @@ def create_partitioned_clustered_table(gcp_credentials):
 @flow(log_prints=True)
 def etl_gcs_to_bq():
     gcp_credentials = get_gcp_credentials()
-    # create_bq_dataset(gcp_credentials_block)
     create_external_table(gcp_credentials)
     create_partitioned_clustered_table(gcp_credentials)
 
