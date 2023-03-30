@@ -22,8 +22,7 @@ This project uses Memphis Police data to answer the following questions:
 - How many crimes have been reported to police in Memphis, TN?
 - What is the distribution of different crime categories (e.g., Motor Vehicle Theft, Assault, etc.)?
 
-Because this is a large dataset that gets updated daily, this project also presents an automated solution to ingest only the latest data each day
-to allow for effective data processing and a regularly updated dashboard.
+Because this is a large dataset that gets updated daily, this project also presents an automated, batch processing solution to ingest the latest data each day and append it to the existing dataset. This allows for effective data processing and a regularly updated dashboard.
 
 
 ## About the Pipeline 
@@ -37,6 +36,22 @@ The pipeline uses the following technologies:
 ## Instructions for Replication
 
 To replicate this project, you'll need a Google Cloud Platform account. GCP offers a 30-day free trial. 
+
+First, create the project and link it to a billing account using the following commands:
+
+```
+gcloud projects create de-zoomcamp-final-project
+
+# Display list of billing accounts
+gcloud alpha billing accounts list
+
+# Link new project to billing account
+gcloud beta billing projects link de-zoomcamp-final-project \
+  --billing-account=<INSERT_BILLING_ACCOUNT_ID>
+
+```
+
+Then, 
 
 ## Future Considerations
 
