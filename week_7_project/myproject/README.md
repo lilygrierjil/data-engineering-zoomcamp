@@ -84,7 +84,8 @@ terraform plan -var="project=de-zoomcamp-final-project"
 terraform apply -var="project=de-zoomcamp-final-project"
 ```
 
-7. To run the full ETL, in one window run `prefect 
+7. To run the full ETL, open one additional terminal window, activate your environment, and run `prefect agent start --work-queue "default"`. Then open a second window, activate your environment, and run `prefect agent start --work-queue "default"`. 
+8. Create the deployment.
 
 99. When you are done, be sure to run `terraform destroy` to destroy all created resources. This step is important as the project uses resource-intensive services that could end up costing you money if you don't shut them down! 
 
