@@ -1,6 +1,6 @@
 # Memphis Police Data, 1986 to Present
 
-For my capstone project for Data Engineering Zoomcamp 2023, I created an end-to-end data pipeline. The pipeline runs daily to make calls to an API.
+For my capstone project for Data Engineering Zoomcamp 2023, I created an end-to-end data pipeline that makes calls to the Memphis City Data API.
 
 ## Problem Description
 
@@ -22,7 +22,7 @@ This project uses Memphis Police data to answer the following questions:
 - How many crimes have been reported to police in Memphis, TN?
 - What is the distribution of different crime categories (e.g., Motor Vehicle Theft, Assault, etc.)?
 
-Because this is a large dataset that gets updated daily, this project also presents an automated, batch processing solution to ingest the latest data each day and append it to the existing dataset. This allows for effective data processing and a regularly updated dashboard.
+Because this is a large dataset that gets updated daily, this project also presents a batch processing solution to ingest the latest data each day. This allows for effective data processing and a regularly updated dashboard.
 
 
 ## About the Pipeline 
@@ -33,12 +33,13 @@ The pipeline uses the following technologies:
 - BigQuery to serve as a data warehouse where the data is prepared for analysis
 - 
 
-The pipeline consists of three Prefect flows, which are run as sub-flows in the full flow. The first flow (found in `flows/ingest.py`) makes a call to the Memphis City Data API and downloads the most up-to-date dataset to a Google Cloud Storage data lake.
+The pipeline consists of three Prefect flows, which are run as sub-flows in the full flow. 
+- The first flow (found in `flows/ingest.py`) makes a call to the Memphis City Data API and downloads the most up-to-date dataset to a Google Cloud Storage data lake.
 
 
-The second flow (found in `flows/gcs_to_bq.py`) transfers the data from the data lake to BigQuery, a data warehouse tool. The data is partitioned on the month-year associated on which the offense date occurs and clustered on the crime type.
+- The second flow (found in `flows/gcs_to_bq.py`) transfers the data from the data lake to BigQuery, a data warehouse tool. The data is partitioned on the month-year associated on which the offense date occurs and clustered on the crime type category. Because it's a relatively small dataset (about 1.7 million rows with under 10 columns), I did not expect to see major gains from partitioning and clustering. I tested running the subsequent Spark queries with and without clustering and partitioning (i.e., clustered and partitioned, only clustered, only partitioned, neither clustered nor partitioned) and found that  clustering on crime categoy and partitioning on offense month resulted in some gains in query execution time (closer to 1 minute compared to 1 minute and 20 seconds). 
 
-The third and final flow (found in WHERE) transforms the data within the data warehouse and prepares it for the dashboard.
+- The third and final flow (found in `flows/spark_job_flow.py`) transforms the data within the data warehouse and prepares it for the dashboard. The original dataset contains one row for each crime, and the query aggregates the dataset, grouping by crime type category and month-year, to get monthly counts of crimes of each category.
 
 After the full flow is run, we can use the aggregated dataset in Google Data Studio to create some visualizations to better understand the data.
 
@@ -71,7 +72,8 @@ This script creates a service account named terraform and assigns it the appropr
 The credentials for this service account are stored in a file called `service_account.json` that gets stored
 in the root of the repo.
 
-5. Install terraform
+5. Install terraform (and other packages)
+
 6. Run the following commands to use terraform to create the remaining resources:
 ```
 terraform init
@@ -82,7 +84,7 @@ terraform plan -var="project=de-zoomcamp-final-project"
 terraform apply -var="project=de-zoomcamp-final-project"
 ```
 
-7. 
+7. To run the full ETL, in one window run `prefect 
 
 99. When you are done, be sure to run `terraform destroy` to destroy all created resources. This step is important as the project uses resource-intensive services that could end up costing you money if you don't shut them down! 
 
