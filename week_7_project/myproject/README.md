@@ -89,6 +89,9 @@ terraform apply -var="project=de-zoomcamp-final-project"
 
 99. When you are done, be sure to run `terraform destroy` to destroy all created resources. This step is important as the project uses resource-intensive services that could end up costing you money if you don't shut them down! 
 
+## Dashboard and Findings
+
+
 
 ## Future Considerations
 
