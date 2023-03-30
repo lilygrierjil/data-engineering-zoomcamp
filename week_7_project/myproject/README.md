@@ -1,4 +1,4 @@
-# Memphis Police Data, 1986 to Present
+# Memphis Police Data Processing Pipeline
 
 For my capstone project for Data Engineering Zoomcamp 2023, I created an end-to-end data pipeline that makes calls to the Memphis City Data API.
 
