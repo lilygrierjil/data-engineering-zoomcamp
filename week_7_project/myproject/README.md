@@ -91,7 +91,7 @@ terraform apply -var="project=de-zoomcamp-final-project"
 
 ## Dashboard and Findings
 
-
+![image](Monthly_Crime_Type_Counts_Memphis_PD.pdf)
 
 ## Future Considerations
 
