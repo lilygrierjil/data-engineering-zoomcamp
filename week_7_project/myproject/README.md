@@ -37,7 +37,10 @@ The pipeline uses the following technologies:
 
 To replicate this project, you'll need a Google Cloud Platform account. GCP offers a 30-day free trial. 
 
-First, create the project and link it to a billing account using the following commands:
+1. If you don't already have a VM, create one.
+2. Clone this repository using the command: INSERT COMMAND HERE. Perform the following commands in the root of this repository.
+
+3. Create a new project (we'll call it de-zoomcamp-final-project) and link it to a billing account using the following commands:
 
 ```
 gcloud projects create de-zoomcamp-final-project
@@ -48,10 +51,31 @@ gcloud alpha billing accounts list
 # Link new project to billing account
 gcloud beta billing projects link de-zoomcamp-final-project \
   --billing-account=<INSERT_BILLING_ACCOUNT_ID>
+  
+# Set the correct project variable
+gcloud config set project de-zoomcamp-final-project
 
 ```
 
-Then, 
+4. Create a service account with the appropriate roles by running the service account script.
+This script creates a service account named terraform and assigns it the appropriate roles.
+The credentials for this service account are stored in a file called `service_account.json` that gets stored
+in the root of the repo.
+
+5. Install terraform
+6. Run the following commands to use terraform to create the remaining resources:
+```
+terraform init
+
+# Check changes to new infra plan
+terraform plan -var="project=de-zoomcamp-final-project"
+# Create new infra
+terraform apply -var="project=de-zoomcamp-final-project"
+```
+
+
+1. When you are done, be sure to run `terraform destroy` to destroy all created resources. This step is important as the project uses resource-intensive services that could end up costing you money if you don't shut them down! 
+
 
 ## Future Considerations
 
