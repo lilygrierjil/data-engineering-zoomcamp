@@ -33,6 +33,15 @@ The pipeline uses the following technologies:
 - BigQuery to serve as a data warehouse where the data is prepared for analysis
 - 
 
+The pipeline consists of three Prefect flows, which are run as sub-flows in the full flow. The first flow (found in `flows/ingest.py`) makes a call to the Memphis City Data API and downloads the most up-to-date dataset to a Google Cloud Storage data lake.
+
+
+The second flow (found in `flows/gcs_to_bq.py`) transfers the data from the data lake to BigQuery, a data warehouse tool. EXPLAIN PARTITION AND CLUSTERING WITH TIME DIFFERENCES...
+
+The third and final flow (found in WHERE) transforms the data within the data warehouse and prepares it for the dashboard.
+
+After the full flow is run, we can use the aggregated dataset in Google Data Studio to create some visualizations to better understand the data.
+
 ## Instructions for Replication
 
 To replicate this project, you'll need a Google Cloud Platform account. GCP offers a 30-day free trial. 
@@ -73,8 +82,9 @@ terraform plan -var="project=de-zoomcamp-final-project"
 terraform apply -var="project=de-zoomcamp-final-project"
 ```
 
+7. 
 
-1. When you are done, be sure to run `terraform destroy` to destroy all created resources. This step is important as the project uses resource-intensive services that could end up costing you money if you don't shut them down! 
+99. When you are done, be sure to run `terraform destroy` to destroy all created resources. This step is important as the project uses resource-intensive services that could end up costing you money if you don't shut them down! 
 
 
 ## Future Considerations
